@@ -1,23 +1,16 @@
 ---
 import type { GetStaticPaths } from 'astro';
+import type { PokemonListResponse } from '../../interface/pokemon-list.response';
 import MainLayout from "../../layouts/MainLayout.astro";
 import PokemonCard from '../../components/pokemons/PokemonCard.astro';
-export const getStaticPaths = (() => {
-  
-  return [
-    { 
-      params: { name: 'bulbasaur' },
-      props: {name: 'bulbasaur', url: "https://pokeapi.co/api/v2/pokemon/1/"}
-    },
-    { 
-      params: {name: 'charmander'}, 
-      props: {name: 'charmander', url: "https://pokeapi.co/api/v2/pokemon/4/"}
-    },
-    { 
-      params: {name: 'raticate'},
-      props: {name: 'raticate', url: "https://pokeapi.co/api/v2/pokemon/20/"}
-    },
-  ];
+
+export const getStaticPaths = (async () => {
+  const resp = await fetch('https://pokeapi.co/api/v2/pokemon?limit=151');
+  const { results } = (await resp.json()) as PokemonListResponse;
+  return results.map(({name, url}) => ({
+    params: { name: name},
+    props: { name: name, url: url}
+  }));
 }) satisfies GetStaticPaths;
 
 const { name } = Astro.params;
@@ -35,6 +28,7 @@ const audioSrc = `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pok
     <PokemonCard 
       name={name}
       URLImage={url}
+      isBig
     />
     <audio controls class="mt-5 ">
       <source src={audioSrc} type="audio/ogg" />

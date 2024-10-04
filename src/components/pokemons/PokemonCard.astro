@@ -2,15 +2,39 @@
 interface Props {
   name: string;
   URLImage: string;
+  isBig?: boolean; //el signo ? es para que el parametro no sea obligatorio de pasar al utilizar el componente, el name y el url son obligatorios pero no isBig
+  
 }
-const {name, URLImage} = Astro.props;
+const {name, URLImage, isBig = false} = Astro.props;
 const id = URLImage.split('/').at(-2);
 const imgSrc = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
 ---
 <a
   href={`/pokemons/${name}`}
-  class="rounded border flex flex-col justify-center items-center p-2">
-  <img src={imgSrc} alt={name} />
-  <h2 class="capitalize">{name}</h2>
+  class:list={[
+    `rounded flex flex-col justify-center items-center p-2`,
+    {
+      border: !isBig,
+    },
+  ]}
+>
+<!-- el transition:name={`${name}-image`} debe ser unico para que se aplique la animacion de la imagen-->
+  <img 
+    transition:name={`${name}-image`}
+    src={imgSrc} 
+    alt={name} 
+    class:list={[
+      {
+        'w-26 h-26': isBig,
+        'w-16 h-16': !isBig
+      }
+    ]}
+  />
+  <h2 class:list={[
+    'capitalize',
+    {
+      'text-4xl text-blue-300': isBig 
+    }
+  ]}>#{id} {name}</h2>
 </a>
 
