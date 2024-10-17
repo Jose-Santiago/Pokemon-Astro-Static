@@ -1,9 +1,9 @@
 ---
 import type { GetStaticPaths } from "astro";
 // Código Server Side Only - en el Momento de construccion BUILD TIME  
-import PokemonCard from '../../components/pokemons/PokemonCard.astro';
-import type {PokemonListResponse} from '../../interface/pokemon-list.response';
-import MainLayout from "../../layouts/MainLayout.astro";
+import PokemonCard from '@components/pokemons/PokemonCard.astro';
+import type {PokemonListResponse} from '@interface/pokemon-list.response';
+import MainLayout from "@layouts/MainLayout.astro";
 
 
 export const getStaticPaths = (async({paginate}) => {
@@ -27,9 +27,28 @@ const { page} = Astro.props; // la prop page se destructura de paginate.
 	<section
 		class="flex mt-10 justify-center items-center gap-10"
 	>
-	<a class="btn" href={page.url.prev}>Anterior</a>
-	<span>Página 1</span>
-	<a class="btn" href={page.url.next}>Siguiente</a>
+	<a 
+		class:list={[
+			'btn',
+			{
+				disabled: !page.url.prev,
+			}
+		]} 
+		href={page.url.prev}
+	>Anterior</a>
+
+
+	<span class="text-xl font-bold">Página {page.currentPage}</span>
+
+
+	<a
+	class:list={[
+		'btn',
+		{
+			disabled: !page.url.next,
+		}
+	]}
+		href={page.url.next}>Siguiente</a>
 
 	</section>
 </MainLayout>
@@ -39,7 +58,7 @@ const { page} = Astro.props; // la prop page se destructura de paginate.
 	.btn{
 		@apply bg-blue-500 p-2 text-white px-4 py-2 rounded-md;
 	}
-	.disable{
+	.disabled{
 		@apply bg-gray-600 to-gray-400;
 	}
 </style>

@@ -3,12 +3,12 @@ interface Props {
   name: string;
   URLImage: string;
   isBig?: boolean; //el signo ? es para que el parametro no sea obligatorio de pasar al utilizar el componente, el name y el url son obligatorios pero no isBig
-  
 }
-const {name, URLImage, isBig = false} = Astro.props;
+const { name, URLImage, isBig = false} = Astro.props;
 const id = URLImage.split('/').at(-2);
 const imgSrc = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
 ---
+<!-- href={`/pokemons/${name}`} -->
 <a
   href={`/pokemons/${name}`}
   class:list={[
